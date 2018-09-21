@@ -11,12 +11,17 @@ export class AppComponent {
 
   signupForm : FormGroup;
   invalidName = 'test';
+  status = ['Stable', 'Critical', 'Finnished'];
+  defaultStatus = 'Stable';
+
 
   ngOnInit() {
     this.signupForm = new FormGroup({
-      'projectName': new FormControl(null, this.forbiddenNames),
-      'email': new FormControl(null, Validators.email, this.forbiddenEmails)
-    })
+      'projectName': new FormControl(null, this.forbiddenNames.bind(this)),
+      'email': new FormControl(null, Validators.email, this.forbiddenEmails),
+      'projectStatus': new FormControl(null)
+    });
+    this.signupForm.controls['projectStatus'].setValue(this.defaultStatus);
   }
 
   onSubmit() {
@@ -24,7 +29,7 @@ export class AppComponent {
   }
 
   forbiddenNames(control: FormControl): { [s: string]: boolean } {
-    if(control.value === 'test') {
+    if(control.value === this.invalidName) {
       return { 'nameIsForbidden' : true };
     }
     return null; 
